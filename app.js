@@ -5,7 +5,7 @@ const port = 1234;
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(logger('combined'));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 

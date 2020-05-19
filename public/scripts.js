@@ -1,5 +1,5 @@
 // Tic Tac Toe
-var socket = io.connect('http://localhost:1234');
+var socket = io.connect('https://mygames01.herokuapp.com');
 var players = ["Panda", "Rishi"];
 var scores = [0,0]; // Will Change
 var markers = ["O", "X"];
