@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const socket = require('socket.io');
-const port = 1234;
+const port = process.env.PORT || 9090;
 
 const app = express();
 
