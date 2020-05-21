@@ -35,23 +35,13 @@
         </div>
     </nav>
     <div id="board">
-        <h2 id="game-display">Tic Tac Toe</h2>
-        <div id="row-1">
-            <div id="1" onclick="play(this,1)"></div>
-            <div id="2" onclick="play(this,2)"></div>
-            <div id="4" onclick="play(this,4)"></div>
+        <canvas height="400" width="200" id="tetris-board"></canvas>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <button onclick="left()" type="button" class="btn btn-secondary">Left</button>
+            <button onclick="right()" type="button" class="btn btn-secondary">Right</button>
+            <button onclick="rotate()" type="button" class="btn btn-secondary">Rotate</button>
+            <button onclick="down()" type="button" class="btn btn-secondary">Down</button>
         </div>
-        <div id="row-2">
-            <div id="8" onclick="play(this,8)"></div>
-            <div id="16" onclick="play(this,16)"></div>
-            <div id="32" onclick="play(this,32)"></div>
-        </div>
-        <div id="row-3">
-            <div id="64" onclick="play(this,64)"></div>
-            <div id="128" onclick="play(this,128)"></div>
-            <div id="256" onclick="play(this,256)"></div>
-        </div>
-        <a onclick="restart()" href="/" class="btn btn-success mt-5" type="button">Restart</a>
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

@@ -11,6 +11,9 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req,res)=>{
     res.render('tictactoe');
+});
+app.get('/tetris', (req,res)=>{
+    res.render('tetris');
 })
 
 const server = app.listen(port,()=>{
