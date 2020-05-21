@@ -38,6 +38,10 @@ var c = document.getElementById('tetris-board');
 var ctx = c.getContext("2d");
 var board = [];
 var totalPieces = 4;
+var gameInterval = window.setInterval(()=>{
+    console.log("alert");
+    obj.moveDown();
+},1000);
 
 // Build the board
 
@@ -59,6 +63,7 @@ function build() {
     }
 }
 
+
 // Piece Object
 
 function piece() {
@@ -74,7 +79,12 @@ function piece() {
         this.y = 0;
         this.ind = 0;
         this.p = Pieces[this.indP];
-        this.draw();
+        if(!this.collision(0,0,this.p[this.ind])) {
+            this.draw();
+        }else {
+            clearInterval(gameInterval);
+            document.getElementById("game-display").innerHTML = "Game Over";
+        }
     }
     this.lockPiece = function () {
         var currentP = this.p[this.ind];
@@ -154,11 +164,12 @@ function piece() {
 }
 
 
-
+// Starting the game
 
 build();
 var obj = new piece(4,0,L);
 obj.draw();
+
 
 
 // Event Listeners
