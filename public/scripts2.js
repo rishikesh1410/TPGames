@@ -3,10 +3,12 @@
 // Pieces
 var Z = [
     [[1,1,0],[0,1,1],[0,0,0]],
-    [[0,1,0],[1,1,0],[1,0,0]],
+    [[0,1,0],[1,1,0],[1,0,0]]
+]
+var S = [
     [[0,1,1],[1,1,0],[0,0,0]],
-    [[0,1,0],[0,1,1],[0,0,1]]
-];
+    [[1,0,0],[1,1,0],[0,1,0]]
+]
 var J = [
     [[1,0,0],[1,1,1],[0,0,0]],
     [[0,1,0],[0,1,0],[1,1,0]],
@@ -23,7 +25,7 @@ var T = [
     [[0,1,0],[1,1,1],[0,0,0]],
     [[1,0,0],[1,1,0],[1,0,0]],
     [[1,1,1],[0,1,0],[0,0,0]],
-    [[0,0,1],[0,1,1],[0,0,1]]
+    [[0,1,0],[1,1,0],[0,1,0]]
 ]
 var I = [
     [[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]],
@@ -39,7 +41,8 @@ var Pieces = {
     2 : [L,"blue"],
     3 : [J,"orange"],
     4 : [I,"cyan"],
-    5 : [O,"yellow"]
+    5 : [O,"yellow"],
+    6 : [S,"green"]
 }
 
 // Globals
@@ -76,7 +79,7 @@ var build = function() {
     p = Pieces[nthPiece][0],pieceColor = Pieces[nthPiece][1];
     gameOver = false,lastScore = 0;
     board = [];
-    totalPieces = 6,quantum = 1100,gameInterval;
+    totalPieces = 7,quantum = 1100,gameInterval;
     for(var i=0;i<20;i++) {
         var row = [];
         for(var j=0;j<10;j++) {
@@ -206,7 +209,10 @@ var clearLines = function () {
                 for(var l=0;l<board[0].length;l++) board[k][l]=board[k-1][l];
             }
             for(var l=0;l<board[0].length;l++) board[0][l]="#fff";
-            if(++score>=lastScore+5) changeSpeed();
+            if(++score>=lastScore+5) {
+                lastScore=score;
+                changeSpeed();
+            }
         }
     }
     document.getElementById("game-display").innerHTML = "<p> Score : "+ score + "</p>";
