@@ -33,5 +33,10 @@ io.on('connection', (socket)=>{
 
     socket.on('restart', (data)=> {
         io.sockets.emit('restart', data);
-    })
+    });
+
+    socket.on('playtetris', (data) => {
+        console.log(data);
+        io.sockets.emit('playtetris', data);
+    });
 });

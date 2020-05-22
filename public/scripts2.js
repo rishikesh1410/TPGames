@@ -1,5 +1,16 @@
 //  Tetris
 
+// Web Sockets
+var socket = io.connect('https://mygames01.herokuapp.com');
+
+function send(obj) {
+  console.log("sending..");
+    socket.emit('playtetris', {
+        obj : obj
+    });
+}
+
+
 // Pieces
 var Z = [
     [[1,1,0],[0,1,1],[0,0,0]],
@@ -100,6 +111,7 @@ function Game() {
         clearInterval(this.gameInterval);
         this.gameInterval = window.setInterval(()=>{
             this.moveDown();
+            send(this);
         },this.quantum);
     }
     this.newPiece = function () {
@@ -235,4 +247,14 @@ function rotate(){ obj.rotate(); }
 function down() { obj.moveDown(); }
 function right() { obj.moveRight(); }
 function left() { obj.moveLeft(); }
+
+
+
+// Web Sockets
+
+socket.on('playtetris', (data) => {
+    obj = data.obj;
+    obj.liveGame();
+});
+
 
