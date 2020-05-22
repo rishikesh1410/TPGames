@@ -49,11 +49,7 @@ var ctx = c.getContext("2d");
 var board = [];
 var totalPieces = 6;
 var quantum = 1000;
-var gameInterval = window.setInterval(()=>{
-    console.log("alert");
-    obj.moveDown();
-    if(obj.score>=5) quantum=quantum/2;
-},quantum);
+var gameInterval;
 
 
 // Build the board
@@ -82,6 +78,15 @@ function build() {
     }
     drawBoard();
 }
+function changeSpeed(){
+    quantum -= 100;
+    obj.level++;
+    document.getElementById("game-over").innerHTML = "<p>Level : "+ obj.level +"</p>";
+    clearInterval(gameInterval);
+    var gameInterval = window.setInterval(()=>{
+        obj.moveDown();
+    },quantum);
+}
 
 
 // Piece Object
@@ -94,6 +99,8 @@ function Game() {
     this.nthInd = 0;
     this.score = 0;
     this.gameOver = false;
+    this.lastScore = 0;
+    this.level = 0;
     this.newPiece = function () {
         this.nthPiece = (this.nthPiece+1)%totalPieces;
         this.x = 4;
@@ -106,7 +113,7 @@ function Game() {
             clearInterval(gameInterval);
             this.clearLines();
             this.gameOver = true;
-            document.getElementById("game-over").innerHTML = "<p>Game Over</p>";
+            document.getElementById("game-over").innerHTML += "<p>Game Over</p>";
         }
     }
     this.lockPiece = function () {
@@ -197,7 +204,7 @@ function Game() {
                     for(var l=0;l<board[0].length;l++) board[k][l]=board[k-1][l];
                 }
                 for(var l=0;l<board[0].length;l++) board[0][l]="#fff";
-                this.score++;
+                if(++this.score>=this.lastScore+5) changeSpeed();
             }
         }
         document.getElementById("game-display").innerHTML = "<p> Score : "+ this.score + "</p>";
@@ -214,6 +221,7 @@ var obj = new Game();
 obj.draw();
 document.getElementById("game-display").innerHTML = "<p> Score : "+ obj.score + "</p>";
 
+changeSpeed();
 
 
 
