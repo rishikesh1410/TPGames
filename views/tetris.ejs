@@ -34,16 +34,32 @@
             </form>
         </div>
     </nav>
-    <div id="board">
-        <h2 id="game-display">Tetris</h2>
-        <h2 id="game-over"></h2>
-        <canvas height="400" width="200" id="tetris-board"></canvas>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <button onclick="left()" type="button" class="btn btn-secondary">Left</button>
-            <button onclick="right()" type="button" class="btn btn-secondary">Right</button>
-            <button onclick="rotate()" type="button" class="btn btn-secondary">Rotate</button>
-            <button onclick="down()" type="button" class="btn btn-secondary">Down</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+                <h2 id="game-display">Tetris</h2>
+                <h2 id="game-over"></h2>
+                <canvas height="400" width="180" id="tetris-board"></canvas>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button onclick="left()" type="button" class="btn btn-secondary">&larr;</button>
+                    <button onclick="rotate()" type="button" class="btn btn-secondary">&uarr;</button>
+                    <button onclick="right()" type="button" class="btn btn-secondary">&rarr;</button>
+                    <button onclick="down()" type="button" class="btn btn-secondary">&darr;</button>
+                </div>
+            </div>
+            <div class="col-6">
+                <h2 id="game-display2">Tetris</h2>
+                <h2 id="game-over2"></h2>
+                <canvas height="400" width="180" id="tetris-board2"></canvas>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button onclick="left2()" type="button" class="btn btn-secondary">&larr;</button>
+                    <button onclick="rotate2()" type="button" class="btn btn-secondary">&uarr;</button>
+                    <button onclick="right2()" type="button" class="btn btn-secondary">&rarr;</button>
+                    <button onclick="down2()" type="button" class="btn btn-secondary">&darr;</button>
+                </div>
+            </div>
         </div>
+        
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -51,4 +67,5 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
 <script src="scripts2.js"></script>
+<script src="scripts3.js"></script>
 </html>

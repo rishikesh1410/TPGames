@@ -82,7 +82,7 @@ var build = function() {
     totalPieces = 7,quantum = 1100,gameInterval;
     for(var i=0;i<20;i++) {
         var row = [];
-        for(var j=0;j<10;j++) {
+        for(var j=0;j<9;j++) {
             row.push("#fff");
         }
         board.push(row);
@@ -155,9 +155,7 @@ var moveDown = function () {
         y++;
         draw();
     }else {
-        console.log(gameOver);
         if(!gameOver) {
-            console.log("calling");
             lockPiece();
             newPiece();
             clearLines();
@@ -191,7 +189,7 @@ var collision = function (xx,yy,currentP) {
             var nextX = x + xx + j;
             var nextY = y + yy + i;
             if(currentP[i][j]==0) continue;
-            if(nextX>=10 || nextX<0 || nextY>=20) return true;
+            if(nextX>=9 || nextX<0 || nextY>=20) return true;
             if(nextY<0) continue;
             if(board[nextY][nextX]!="#fff") return true;
         }
