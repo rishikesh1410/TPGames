@@ -48,9 +48,12 @@ var c = document.getElementById('tetris-board');
 var ctx = c.getContext("2d");
 var board = [];
 var totalPieces = 6;
+var quantum = 1000;
 var gameInterval = window.setInterval(()=>{
+    console.log("alert");
     obj.moveDown();
-},1000);
+    if(obj.score>=5) quantum=quantum/2;
+},quantum);
 
 
 // Build the board
@@ -90,6 +93,7 @@ function Game() {
     this.p = Pieces[this.nthPiece][0];
     this.nthInd = 0;
     this.score = 0;
+    this.gameOver = false;
     this.newPiece = function () {
         this.nthPiece = (this.nthPiece+1)%totalPieces;
         this.x = 4;
@@ -101,7 +105,8 @@ function Game() {
         }else {
             clearInterval(gameInterval);
             this.clearLines();
-            document.getElementById("game-display").innerHTML += "<br><span>Game Over</span>";
+            this.gameOver = true;
+            document.getElementById("game-over").innerHTML = "<p>Game Over</p>";
         }
     }
     this.lockPiece = function () {
@@ -140,27 +145,29 @@ function Game() {
             this.y++;
             this.draw();
         }else {
-            this.lockPiece();
-            this.newPiece();
-            this.clearLines();
+            if(!this.gameOver) {
+                this.lockPiece();
+                this.newPiece();
+                this.clearLines();
+            }
         }
     }
     this.moveLeft = function () {
-        if(!this.collision(-1,0,this.p[this.nthInd])) {
+        if(!this.gameOver && !this.collision(-1,0,this.p[this.nthInd])) {
             this.unDraw();
             this.x--;
             this.draw();
         }
     }
     this.moveRight = function () {
-        if(!this.collision(1,0,this.p[this.nthInd])) {
+        if(!this.gameOver && !this.collision(1,0,this.p[this.nthInd])) {
             this.unDraw();
             this.x++;
             this.draw();
         }
     }
     this.rotate = function () {
-        if(!this.collision(0,0,this.p[(this.nthInd+1)%(this.p.length)])) {
+        if(!this.gameOver && !this.collision(0,0,this.p[(this.nthInd+1)%(this.p.length)])) {
             this.unDraw();
             this.nthInd = (this.nthInd+1)%(this.p.length);
             this.draw();
@@ -193,7 +200,7 @@ function Game() {
                 this.score++;
             }
         }
-        document.getElementById("game-display").innerHTML = "<span> Score : "+ this.score + "</span>";
+        document.getElementById("game-display").innerHTML = "<p> Score : "+ this.score + "</p>";
         drawBoard();
     }
 
@@ -205,7 +212,7 @@ function Game() {
 build();
 var obj = new Game();
 obj.draw();
-document.getElementById("game-display").innerHTML = "<span> Score : "+ obj.score + "</span>";
+document.getElementById("game-display").innerHTML = "<p> Score : "+ obj.score + "</p>";
 
 
 
