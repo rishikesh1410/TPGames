@@ -19,17 +19,27 @@ var L = [
     [[1,1,0],[0,1,0],[0,1,0]],
     [[1,1,1],[1,0,0],[0,0,0]]
 ]
-var E = [
+var T = [
     [[0,1,0],[1,1,1],[0,0,0]],
     [[1,0,0],[1,1,0],[1,0,0]],
     [[1,1,1],[0,1,0],[0,0,0]],
     [[0,0,1],[0,1,1],[0,0,1]]
 ]
+var I = [
+    [[1,0,0,0],[1,0,0,0],[1,0,0,0],[1,0,0,0]],
+    [[1,1,1,1],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+]
+var O = [
+    [[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]]
+]
+
 var Pieces = {
-    0 : Z,
-    1 : E,
-    2 : L,
-    3 : J
+    0 : [Z,"red"],
+    1 : [T,"purple"],
+    2 : [L,"blue"],
+    3 : [J,"orange"],
+    4 : [I,"cyan"],
+    5 : [O,"yellow"]
 }
 
 // Globals
@@ -37,11 +47,11 @@ var Pieces = {
 var c = document.getElementById('tetris-board');
 var ctx = c.getContext("2d");
 var board = [];
-var totalPieces = 4;
+var totalPieces = 6;
 var gameInterval = window.setInterval(()=>{
-    console.log("alert");
     obj.moveDown();
 },1000);
+
 
 // Build the board
 
@@ -52,62 +62,70 @@ function fillColor(i,j,color) {
     ctx.fill();
     ctx.stroke();
 }
+function drawBoard() {
+    for(var i=0;i<board.length;i++) {
+        for(var j=0;j<board[0].length;j++) {
+            fillColor(j,i,board[i][j]);
+        }
+    }
+}
 function build() {
     for(var i=0;i<20;i++) {
         var row = [];
         for(var j=0;j<10;j++) {
-            fillColor(j,i,"#fff");
-            row.push(0);
+            row.push("#fff");
         }
         board.push(row);
     }
+    drawBoard();
 }
 
 
 // Piece Object
 
-function piece() {
+function Game() {
     this.x = 4;
     this.y = 0;
-    this.indP = 0;
-    this.p = Pieces[this.indP];
-    this.ind = 0;
-    this.total = 4;
+    this.nthPiece = 0;
+    this.p = Pieces[this.nthPiece][0];
+    this.nthInd = 0;
+    this.score = 0;
     this.newPiece = function () {
-        this.indP = (this.indP+1)%totalPieces;
+        this.nthPiece = (this.nthPiece+1)%totalPieces;
         this.x = 4;
         this.y = 0;
-        this.ind = 0;
-        this.p = Pieces[this.indP];
-        if(!this.collision(0,0,this.p[this.ind])) {
+        this.nthInd = 0;
+        this.p = Pieces[this.nthPiece][0];
+        if(!this.collision(0,0,this.p[this.nthInd])) {
             this.draw();
         }else {
             clearInterval(gameInterval);
-            document.getElementById("game-display").innerHTML = "Game Over";
+            this.clearLines();
+            document.getElementById("game-display").innerHTML += "<br><span>Game Over</span>";
         }
     }
     this.lockPiece = function () {
-        var currentP = this.p[this.ind];
+        var currentP = this.p[this.nthInd];
         for(var i=0;i<currentP.length;i++) {
             for(var j=0;j<currentP.length;j++) {
                 if(currentP[i][j]==1){
-                    board[this.y+i][this.x+j]=1;
+                    board[this.y+i][this.x+j]=Pieces[this.nthPiece][1];
                 }
             }
         }
     }
     this.draw = function () {
-        var currentP = this.p[this.ind];
+        var currentP = this.p[this.nthInd];
         for(var i=0;i<currentP.length;i++) {
             for(var j=0;j<currentP.length;j++) {
                 if(currentP[i][j]==1){
-                    fillColor(this.x+j,this.y+i,"blue");
+                    fillColor(this.x+j,this.y+i,Pieces[this.nthPiece][1]);
                 }
             }
         }
     }
     this.unDraw = function () {
-        var currentP = this.p[this.ind];
+        var currentP = this.p[this.nthInd];
         for(var i=0;i<currentP.length;i++) {
             for(var j=0;j<currentP.length;j++) {
                 if(currentP[i][j]==1){
@@ -117,33 +135,34 @@ function piece() {
         }
     }
     this.moveDown = function () {
-        if(!this.collision(0,1,this.p[this.ind])) {
+        if(!this.collision(0,1,this.p[this.nthInd])) {
             this.unDraw();
             this.y++;
             this.draw();
         }else {
             this.lockPiece();
             this.newPiece();
+            this.clearLines();
         }
     }
     this.moveLeft = function () {
-        if(!this.collision(-1,0,this.p[this.ind])) {
+        if(!this.collision(-1,0,this.p[this.nthInd])) {
             this.unDraw();
             this.x--;
             this.draw();
         }
     }
     this.moveRight = function () {
-        if(!this.collision(1,0,this.p[this.ind])) {
+        if(!this.collision(1,0,this.p[this.nthInd])) {
             this.unDraw();
             this.x++;
             this.draw();
         }
     }
     this.rotate = function () {
-        if(!this.collision(0,0,this.p[(this.ind+1)%this.total])) {
+        if(!this.collision(0,0,this.p[(this.nthInd+1)%(this.p.length)])) {
             this.unDraw();
-            this.ind = (this.ind+1)%this.total;
+            this.nthInd = (this.nthInd+1)%(this.p.length);
             this.draw();
         }
     }
@@ -155,10 +174,27 @@ function piece() {
                 if(currentP[i][j]==0) continue;
                 if(nextX>=10 || nextX<0 || nextY>=20) return true;
                 if(nextY<0) continue;
-                if(board[nextY][nextX]==1) return true;
+                if(board[nextY][nextX]!="#fff") return true;
             }
         }
         return false;
+    }
+    this.clearLines = function () {
+        for(var i=0;i<board.length;i++) {
+            var isRowFull = true;
+            for(var j=0;j<board[0].length;j++) {
+                if(board[i][j]=="#fff") isRowFull=false;
+            }
+            if(isRowFull) {
+                for(var k=i;k>=1;k--) {
+                    for(var l=0;l<board[0].length;l++) board[k][l]=board[k-1][l];
+                }
+                for(var l=0;l<board[0].length;l++) board[0][l]="#fff";
+                this.score++;
+            }
+        }
+        document.getElementById("game-display").innerHTML = "<span> Score : "+ this.score + "</span>";
+        drawBoard();
     }
 
 }
@@ -167,8 +203,10 @@ function piece() {
 // Starting the game
 
 build();
-var obj = new piece(4,0,L);
+var obj = new Game();
 obj.draw();
+document.getElementById("game-display").innerHTML = "<span> Score : "+ obj.score + "</span>";
+
 
 
 
