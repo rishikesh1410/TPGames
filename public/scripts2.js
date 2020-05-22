@@ -46,47 +46,11 @@ var Pieces = {
 
 var c = document.getElementById('tetris-board');
 var ctx = c.getContext("2d");
-var board = [];
-var totalPieces = 6;
-var quantum = 1000;
-var gameInterval;
 
 
 // Build the board
 
-function fillColor(i,j,color) {
-    ctx.beginPath();
-    ctx.fillStyle = color;
-    ctx.rect(i*20, j*20, 20, 20);
-    ctx.fill();
-    ctx.stroke();
-}
-function drawBoard() {
-    for(var i=0;i<board.length;i++) {
-        for(var j=0;j<board[0].length;j++) {
-            fillColor(j,i,board[i][j]);
-        }
-    }
-}
-function build() {
-    for(var i=0;i<20;i++) {
-        var row = [];
-        for(var j=0;j<10;j++) {
-            row.push("#fff");
-        }
-        board.push(row);
-    }
-    drawBoard();
-}
-function changeSpeed(){
-    quantum -= 100;
-    obj.level++;
-    document.getElementById("game-over").innerHTML = "<p>Level : "+ obj.level +"</p>";
-    clearInterval(gameInterval);
-    var gameInterval = window.setInterval(()=>{
-        obj.moveDown();
-    },quantum);
-}
+
 
 
 // Piece Object
@@ -101,8 +65,45 @@ function Game() {
     this.gameOver = false;
     this.lastScore = 0;
     this.level = 0;
+    this.board = [];
+    this.totalPieces = 6;
+    this.quantum = 1000;
+    this.gameInterval;
+    this.fillColor = function(i,j,color) {
+        ctx.beginPath();
+        ctx.fillStyle = color;
+        ctx.rect(i*20, j*20, 20, 20);
+        ctx.fill();
+        ctx.stroke();
+    }
+    this.drawBoard = function() {
+        for(var i=0;i<this.board.length;i++) {
+            for(var j=0;j<this.board[0].length;j++) {
+                this.fillColor(j,i,this.board[i][j]);
+            }
+        }
+    }
+    this.build = function() {
+        for(var i=0;i<20;i++) {
+            var row = [];
+            for(var j=0;j<10;j++) {
+                row.push("#fff");
+            }
+            this.board.push(row);
+        }
+        this.drawBoard();
+    }
+    this.changeSpeed = function(){
+        this.quantum -= 100;
+        this.level++;
+        document.getElementById("game-over").innerHTML = "<p>Level : "+ this.level +"</p>";
+        clearInterval(this.gameInterval);
+        this.gameInterval = window.setInterval(()=>{
+            this.moveDown();
+        },this.quantum);
+    }
     this.newPiece = function () {
-        this.nthPiece = (this.nthPiece+1)%totalPieces;
+        this.nthPiece = (this.nthPiece+1)%this.totalPieces;
         this.x = 4;
         this.y = 0;
         this.nthInd = 0;
@@ -110,7 +111,7 @@ function Game() {
         if(!this.collision(0,0,this.p[this.nthInd])) {
             this.draw();
         }else {
-            clearInterval(gameInterval);
+            clearInterval(this.gameInterval);
             this.clearLines();
             this.gameOver = true;
             document.getElementById("game-over").innerHTML += "<p>Game Over</p>";
@@ -121,7 +122,7 @@ function Game() {
         for(var i=0;i<currentP.length;i++) {
             for(var j=0;j<currentP.length;j++) {
                 if(currentP[i][j]==1){
-                    board[this.y+i][this.x+j]=Pieces[this.nthPiece][1];
+                    this.board[this.y+i][this.x+j]=Pieces[this.nthPiece][1];
                 }
             }
         }
@@ -131,7 +132,7 @@ function Game() {
         for(var i=0;i<currentP.length;i++) {
             for(var j=0;j<currentP.length;j++) {
                 if(currentP[i][j]==1){
-                    fillColor(this.x+j,this.y+i,Pieces[this.nthPiece][1]);
+                    this.fillColor(this.x+j,this.y+i,Pieces[this.nthPiece][1]);
                 }
             }
         }
@@ -141,7 +142,7 @@ function Game() {
         for(var i=0;i<currentP.length;i++) {
             for(var j=0;j<currentP.length;j++) {
                 if(currentP[i][j]==1){
-                    fillColor(this.x+j,this.y+i,"#fff");
+                    this.fillColor(this.x+j,this.y+i,"#fff");
                 }
             }
         }
@@ -188,42 +189,46 @@ function Game() {
                 if(currentP[i][j]==0) continue;
                 if(nextX>=10 || nextX<0 || nextY>=20) return true;
                 if(nextY<0) continue;
-                if(board[nextY][nextX]!="#fff") return true;
+                if(this.board[nextY][nextX]!="#fff") return true;
             }
         }
         return false;
     }
     this.clearLines = function () {
-        for(var i=0;i<board.length;i++) {
+        for(var i=0;i<this.board.length;i++) {
             var isRowFull = true;
-            for(var j=0;j<board[0].length;j++) {
-                if(board[i][j]=="#fff") isRowFull=false;
+            for(var j=0;j<this.board[0].length;j++) {
+                if(this.board[i][j]=="#fff") isRowFull=false;
             }
             if(isRowFull) {
                 for(var k=i;k>=1;k--) {
-                    for(var l=0;l<board[0].length;l++) board[k][l]=board[k-1][l];
+                    for(var l=0;l<this.board[0].length;l++) this.board[k][l]=this.board[k-1][l];
                 }
-                for(var l=0;l<board[0].length;l++) board[0][l]="#fff";
-                if(++this.score>=this.lastScore+5) changeSpeed();
+                for(var l=0;l<this.board[0].length;l++) this.board[0][l]="#fff";
+                if(++this.score>=this.lastScore+5) this.changeSpeed();
             }
         }
         document.getElementById("game-display").innerHTML = "<p> Score : "+ this.score + "</p>";
-        drawBoard();
+        this.drawBoard();
+    }
+    this.startGame = function() {
+        document.getElementById("game-display").innerHTML = "<p> Score : "+ obj.score + "</p>";
+        this.build();
+        this.draw();
+        this.changeSpeed();
+    }
+    this.liveGame = function () {
+        document.getElementById("game-display").innerHTML = "<p> Score : "+ obj.score + "</p>";
+        this.draw();
+        this.changeSpeed();
     }
 
 }
 
 
 // Starting the game
-
-build();
 var obj = new Game();
-obj.draw();
-document.getElementById("game-display").innerHTML = "<p> Score : "+ obj.score + "</p>";
-
-changeSpeed();
-
-
+obj.startGame();
 
 // Event Listeners
 function rotate(){ obj.rotate(); }
