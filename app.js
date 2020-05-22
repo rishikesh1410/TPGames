@@ -5,7 +5,7 @@ const port = process.env.PORT || 9090;
 
 const app = express();
 
-app.use(logger('combined'));
+app.use(logger('dev'));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
@@ -36,7 +36,6 @@ io.on('connection', (socket)=>{
     });
 
     socket.on('playtetris', (data) => {
-        console.log(data);
         io.sockets.emit('playtetris', data);
     });
 });
