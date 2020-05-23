@@ -14,7 +14,10 @@ app.get('/', (req,res)=>{
 });
 app.get('/tetris', (req,res)=>{
     res.render('tetris');
-})
+});
+app.get('/tetris_2player', (req,res)=>{
+    res.render('tetris_2player');
+});
 
 const server = app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);
