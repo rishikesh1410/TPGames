@@ -5,6 +5,7 @@ body{
     text-align: center;
     -moz-user-select: none;
     -webkit-user-select: none;
+    touch-action : mainpulation;
     font-family: 'Courgette', cursive;
 }
 
