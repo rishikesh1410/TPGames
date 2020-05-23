@@ -16,7 +16,10 @@ app.get('/tetris', (req,res)=>{
     res.render('tetris');
 });
 app.get('/tetris_2player', (req,res)=>{
-    res.render('tetris_2player');
+    res.send('Coming Soon');
+});
+app.get('/pingpong', (req,res)=>{
+    res.render('pingpong');
 });
 
 const server = app.listen(port,()=>{
