@@ -1,6 +1,7 @@
 var canvas = document.getElementById("pingpong-board");
 var ctx = canvas.getContext("2d");
-
+var round = 0;
+var lastRound = 0;
 var p1 = {
     x : 0,
     y : (canvas.height)/2 - 35,
@@ -85,20 +86,32 @@ function render() {
 
 
 function collision() {
-    if(ball.x == 10) {
+    if(ball.x <= 10) {
         if(ball.y>=(p1.y) && (ball.y<=(p1.y+70))) {
             ball.velocityX = -ball.velocityX;
+            nextRound();
         }else {
             p2.score++;
             reset();
         }
-    }else if(ball.x == (canvas.width-10)) {
+    }else if(ball.x >= (canvas.width-10)) {
         if(ball.y>=(p2.y) && (ball.y<=(p2.y + 70))) {
             ball.velocityX = -ball.velocityX;
+            nextRound();
         }else {
             p1.score++;
             reset();
         }
+    }
+}
+function nextRound() {
+    round++;
+    if(round>=lastRound+10) {
+        lastRound = round;
+        if(ball.velocityX < 0) ball.velocityX -= 1;
+        else ball.velocityX += 1;
+        if(ball.velocityY < 0) ball.velocityY -= 1;
+        else ball.velocityY += 1;
     }
 }
 
@@ -109,25 +122,26 @@ function reset() {
     p1.y = (canvas.height)/2 - 35; 
     p2.x = (canvas.width - 10);
     p2.y = (canvas.height)/2 - 35;
+    round=0;
 }
 
 
 
 // Move the Handle
 function up1() {
-    p1.y-=10;
+    p1.y-=20;
     render();
 }
 function down1() {
-    p1.y+=10;
+    p1.y+=20;
     render();
 }
 function up2() {
-    p2.y-=10;
+    p2.y-=20;
     render();
 }
 function down2() {
-    p2.y+=10;
+    p2.y+=20;
     render();
 }
 render();
