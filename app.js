@@ -41,7 +41,7 @@ io.on('connection', (socket)=>{
         io.sockets.emit('restart', data);
     });
 
-    socket.on('playtetris', (data) => {
-        io.sockets.emit('playtetris', data);
+    socket.on('playpingpong', (data) => {
+        io.sockets.emit('playpingpong', data);
     });
 });
