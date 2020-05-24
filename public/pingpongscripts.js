@@ -1,6 +1,6 @@
 var canvas = document.getElementById("pingpong-board");
 var ctx = canvas.getContext("2d");
-var socket = io.connect('https://mygames01.herokuapp.com');
+//var socket = io.connect('https://mygames01.herokuapp.com');
 var round = 0;
 var lastRound = 0;
 var p1 = {
@@ -149,12 +149,12 @@ function down2() {
     render();
 }
 render();
-send();
+//send();
 var game = window.setInterval(()=>{
     collision();
     update();
     render();
-    send();
+    //send();
 },25);
 
 
@@ -162,19 +162,19 @@ function stop() {
     clearInterval(game);
 }
 
-function send(val) {
-  console.log("sending..");
-    socket.emit('playpingpong', {
-        p1 : p1,
-        p2 : p2,
-        ball : ball,
-        net : net
-    });
-}
+// function send(val) {
+//   console.log("sending..");
+//     socket.emit('playpingpong', {
+//         p1 : p1,
+//         p2 : p2,
+//         ball : ball,
+//         net : net
+//     });
+// }
 
-socket.on('playpingpong', (data) => {
-    p1 = data.p1;
-    p2 = data.p2;
-    ball = data.ball;
-    net = data.net;
-});
+// socket.on('playpingpong', (data) => {
+//     p1 = data.p1;
+//     p2 = data.p2;
+//     ball = data.ball;
+//     net = data.net;
+// });
