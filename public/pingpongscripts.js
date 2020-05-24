@@ -118,11 +118,14 @@ function nextRound() {
 function reset() {
     ball.x = canvas.width/2;
     ball.y = canvas.height/2;
+    ball.velocityX = 2;
+    ball.velocityY = 2;
     p1.x = 0;
     p1.y = (canvas.height)/2 - 35; 
     p2.x = (canvas.width - 10);
     p2.y = (canvas.height)/2 - 35;
     round=0;
+    lastRound=0;
 }
 
 
