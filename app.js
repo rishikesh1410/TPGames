@@ -3,6 +3,11 @@ const express = require('express');
 const logger = require('morgan');
 const socket = require('socket.io');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
+const passport = require('passport');
+
+const passportSetup = require('./config/passportConfig');
+const keys = require('./config/keys');
 const port = process.env.PORT || 5000;
 
 // Import Routers
@@ -23,6 +28,15 @@ app.use(logger('dev')); // For logging erros in console
 app.set('view engine', 'ejs');  // For rendering dynamic content in html documents
 app.use(express.static(__dirname + '/public')); // For rendering static files
 app.use(bodyParser.json()); // For parsing post data
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [keys.session.cookieKey]
+})); // Setup cookie session which will store app cookie variables for 24hrs
+
+app.use(passport.initialize()); // Intialize passport
+app.use(passport.session()); // Setup passport session for storing session variables
+
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
@@ -31,6 +45,10 @@ app.use('/home', homeRouter);
 app.use('/tictactoe', tictactoeRouter);
 app.use('/pingpong', pingpongRouter);
 app.use('/tetris', tetrisRouter);
+app.get('/logout',(req,res)=>{
+    req.logout();
+    res.redirect('/');
+});
 
 
 // Create Server

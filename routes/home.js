@@ -11,7 +11,8 @@ home.route('/')
     next();
 })
 .get((req,res)=>{
-    res.render('home');
+    let user = req.user;
+    res.render('home', {'name' : user.name});
 });
 
 module.exports = home;
