@@ -76,7 +76,7 @@ function update() {
 }
 
 function render() {
-    drawBoard(0,0,600,400,"black");
+    drawBoard(0,0,600,400,"brown");
     drawNet(net.x,net.y,net.width,net.height,net.color);
     drawRect(p1.x,p1.y,p1.width,p1.height,p1.color);
     drawRect(p2.x,p2.y,p2.width,p2.height,p2.color);
