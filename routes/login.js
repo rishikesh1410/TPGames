@@ -16,6 +16,7 @@ login.route('/')
 })
 .post(urlencodedParser, passport.authenticate('local', { failureRedirect: '/login?signup=0' }),(req,res)=>{
     console.log(req.user);
+
     res.redirect('/home');
 });
 

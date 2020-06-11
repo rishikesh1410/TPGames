@@ -1,5 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mysql = require('mysql');
+const fs = require('fs');
+const io = require('socket.io-client');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const register = express.Router();
